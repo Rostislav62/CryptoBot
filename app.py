@@ -1,51 +1,14 @@
 import telebot
-import requests
-import json
+from config import keys, TOKEN
+from utils import ConvertionException, CryptoConverter
 
-# Токен, который вы получили от BotFather
-TOKEN = '7160813775:AAEMBRCqmujyumtZTXTwEEswcPGLNu7iOdY'
+
 bot = telebot.TeleBot(TOKEN)
 
 @bot.message_handler()
 def echo_test(message: telebot.types.Message):
     bot.send_message(message.chat.id, 'Hello man!')
 
-keys ={
-    'bitcoin': 'BTC',
-    'efirium': 'ETH',
-    'dollar': 'USD'
-}
-
-class ConvertionException(Exception):
-    pass
-
-class CryptoConverter:
-    @staticmethod
-    def convert(quote: str, base: str, amount: str):
-
-        
-        if quote == base:
-            raise ConvertionException('Unable to transfer identical currencies {base}.')
-        
-        try:
-            quote_ticker = keys[quote]
-        except KeyError:
-            raise ConvertionException('We were unable to process {quote} currency.')
-        
-        try:
-            base_ticker = keys[base]
-        except KeyError:
-            raise ConvertionException('We were unable to process {base} currency.')
-
-        try:
-            amount = float(amount)
-        except ValueError:
-            raise ConvertionException('We were unable to process the quantity {amount}.')
-        
-        r = requests.get(f'https://min-api.cryptocompare.com/data/price?fsym{quote_ticker}&tsym{base_ticker}')
-        total_base = json.loads(r.content)[keys[base]]
-
-        return total_base
 
 # Декоратор для обработки команды /start and help
 @bot.message_handler(commands=['start'])
@@ -76,17 +39,22 @@ def values(message: telebot.types.Message):
 
 @bot.message_handler(content_types=['text', ])
 def convert(message: telebot.types.Message):
-    values = message.text.split(' ')
 
-    quote, base, amount = values
+    try:
+        values = message.text.split(' ')
 
-    if len(values) != 3:
-        raise ConvertionException('To many parametres')
-     
-    total_base = CryptoConverter.convert(quote, base, amount)
-    text = f'Price {amount} {quote} in {base} = {total_base}'
+        if len(values) != 3:
+                    raise ConvertionException('To many parametres')
+        quote, base, amount = values
 
-    bot.send_message(message.chat.id, text)
+        total_base = CryptoConverter.convert(quote, base, amount)
+    except ConvertionException as e:
+         bot.reply_to(message, f'User error\n{e}')
+    except Exception as e:
+        bot.reply_to(message, f'Failed to process command (server error)\n{e}')
+    else:
+        text = f'Price {amount} {quote} in {base} = {total_base}'
+        bot.send_message(message.chat.id, text)
 
 #
 # # Декоратор для обработки всех текстовых сообщений
