@@ -5,10 +5,31 @@ from utils import ConvertionException, CryptoConverter
 bot = telebot.TeleBot(TOKEN)
 
 
-# Декоратор для обработки команды /start and help
+# Декоратор для обработки команды /start
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     bot.reply_to(message, "Hello! I am your own bot.")
+
+
+# # Декоратор для обработки команды /start
+# @bot.message_handler(commands=['start'])
+# def send_welcome(message):
+#     bot.reply_to(message, ('Hello!\n'
+#                            'I am a bot assistant in currency conversion.\n'
+#                            'To get instructions on how to use currency conversion,\n'
+#                            'click: /help\n'
+#                            '\nTo get the exchange rate of two currencies relative to each other you must:\n'
+#                            'enter the name of the currency whose price you want to know (base currency),\n'
+#                            'enter the name of the currency in which you want to know the price of the first currency '
+#                            '(quote currency), separated by a space,\n'
+#                            'and the amount of the first currency, separated by a space.\n'
+#                            '\n<base currency> <quote currency> <amount of base currency> \n'
+#                            '\nFor example:\n '
+#                            'bitcoin dollar 1'
+#                            '\nTo see a list of available currencies, click: /values'
+#                            )
+#                  )
+
 
 
 @bot.message_handler(commands=['help'])
@@ -20,6 +41,23 @@ def help(message: telebot.types.Message):
             )
 
     bot.reply_to(message, text)
+
+# Декоратор для обработки команды /help
+# @bot.message_handler(commands=['help'])
+# def help(message: telebot.types.Message):
+#     text = ('Hello!\n'
+#             'To get the exchange rate of two currencies relative to each other you must:\n'
+#             'enter the name of the currency whose price you want to know (base currency),\n'
+#             'enter the name of the currency in which you want to know the price of the first currency (quote '
+#             'currency), separated by a space,\n'
+#             'and the amount of the first currency, separated by a space.\n'
+#             '\n<base currency> <quote currency> <amount of base currency> \n'
+#             '\nFor example:\n '
+#             'bitcoin dollar 1'
+#             '\nTo see a list of available currencies, click: /values'
+#             )
+# 
+#     bot.reply_to(message, text)
 
 
 @bot.message_handler(commands=['values'])
