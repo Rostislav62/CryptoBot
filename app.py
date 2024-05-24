@@ -31,7 +31,7 @@ def send_welcome(message):
 #                  )
 
 
-
+# Декоратор для обработки команды /help
 @bot.message_handler(commands=['help'])
 def help(message: telebot.types.Message):
     text = ('Для начала работы бота необходимо ввести команду в формате:\n<currency name>\
