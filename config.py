@@ -1,7 +1,10 @@
-TOKEN = '7160813775:AAEMBRCqmujyumtZTXTwEEswcPGLNu7iOdY'
+TOKEN = '7148692650:AAGgk9MkQJKicsPsK3GD-QhTku5u1XILIfQ'
 
 keys = {
     'bitcoin' : 'BTC',
     'efirium' : 'ETH',
-    'dollar'  : 'USD'
+    'dollar'  : 'USD',
+    'euro'    : 'EUR',
+    'rubli'   : 'RUB'
+
 }
